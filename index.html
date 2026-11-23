@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>冰之壁垒（The Ramparts of Ice）测试</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+background:linear-gradient(165deg,#0a1128 0%,#16264a 45%,#244a72 100%);color:#eaf2ff;min-height:100vh}
+#app{max-width:540px;margin:0 auto;padding:28px 20px 60px}
+.hero{text-align:center;padding:24px 8px 8px}
+.hero .badge{display:inline-block;font-size:12px;letter-spacing:2px;color:#8fd3ff;border:1px solid rgba(143,211,255,.4);
+border-radius:20px;padding:4px 14px;margin-bottom:18px}
+h1{font-size:26px;margin:8px 0 6px;line-height:1.35}
+.sub{font-size:14px;color:#a9c4e6;line-height:1.8}
+.desc{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;
+padding:16px 18px;font-size:14px;line-height:1.9;color:#d4e4f7;margin:20px 0}
+.btn{display:block;width:100%;padding:15px;border:none;border-radius:14px;font-size:16px;font-weight:600;
+color:#fff;background:linear-gradient(90deg,#3f8cff,#6f6bff);margin-top:18px;cursor:pointer;box-shadow:0 8px 24px rgba(63,140,255,.35)}
+.btn.ghost{background:rgba(255,255,255,.08);box-shadow:none;color:#cfe0f5;font-weight:400}
+.meta{font-size:12px;color:#7f9cc0;margin-top:14px;text-align:center}
+.qhead{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#a9c4e6;margin:8px 2px 12px}
+.bar{height:6px;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;margin-bottom:22px}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,#3f8cff,#76e4ff);width:0;transition:width .25s}
+.qtext{font-size:21px;line-height:1.6;min-height:110px;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px 4px}
+.opts{display:flex;gap:8px;margin:18px 0}
+.opt{flex:1;padding:14px 2px;border:1px solid rgba(255,255,255,.18);border-radius:12px;background:rgba(255,255,255,.06);
+color:#dbe9fa;text-align:center;font-size:13px;cursor:pointer;transition:.15s}
+.opt.sel{background:linear-gradient(135deg,#3f8cff,#6f6bff);border-color:transparent;color:#fff;font-weight:600;transform:translateY(-2px)}
+.nav{display:flex;gap:12px;margin-top:8px}
+.nav .btn{margin-top:0}
+.nav .btn:disabled{opacity:.35;cursor:not-allowed}
+.res-name{font-size:30px;font-weight:700;text-align:center;margin:6px 0 4px;
+background:linear-gradient(90deg,#9fe0ff,#b9a8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.res-sub{text-align:center;font-size:13px;color:#9fb8d8;margin-bottom:20px}
+.res-desc{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;
+padding:18px;font-size:14px;line-height:1.95;color:#dce9f8}
+.section-t{font-size:13px;color:#8fd3ff;letter-spacing:1px;margin:26px 2px 12px}
+.row{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:13px}
+.row .nm{width:72px;flex:none;color:#bcd2ec}
+.row .track{flex:1;height:10px;background:rgba(255,255,255,.1);border-radius:6px;overflow:hidden}
+.row .track>i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,#3f8cff,#76e4ff)}
+.row .pc{width:38px;text-align:right;color:#9fb8d8}
+.row.top .nm{color:#fff;font-weight:600}
+.note{font-size:11px;color:#6f8bab;line-height:1.7;margin-top:24px;text-align:center}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="intro">
+    <div class="hero">
+      <div class="badge">IDRlabs · 角色测试</div>
+      <h1>冰之壁垒<br>The Ramparts of Ice</h1>
+      <div class="sub">你是《冰之壁垒》里的哪一个角色？</div>
+    </div>
+    <div class="desc">这组测试捕捉自我保护与真诚连接之间的微妙平衡。根据你的日常习惯和社交本能，看看你最像其中哪一位角色。</div>
+    <button class="btn" onclick="start()">开始测试（共 35 题）</button>
+    <div class="meta">题目与结果说明取自原站 · 本地离线版，无需联网</div>
+  </div>
+
+  <div id="quiz" style="display:none">
+    <div class="qhead"><span id="qnum">问题 1 / 35</span><span id="qhint">选择最符合你的程度</span></div>
+    <div class="bar"><i id="progress"></i></div>
+    <div class="qtext" id="qtext"></div>
+    <div class="opts" id="opts"></div>
+    <div class="nav">
+      <button class="btn ghost" id="prev" onclick="prev()">上一题</button>
+      <button class="btn" id="next" onclick="next()">下一题</button>
+    </div>
+  </div>
+
+  <div id="result" style="display:none">
+    <div class="res-sub">你最像的角色是</div>
+    <div class="res-name" id="resName"></div>
+    <div class="res-desc" id="resDesc"></div>
+    <div class="section-t">七位角色匹配度</div>
+    <div id="bars"></div>
+    <button class="btn" onclick="start()">重新测试</button>
+    <div class="note">本页为离线复刻版，计分依据题目语义还原，结果可能与原站精确算法略有出入。</div>
+  </div>
+</div>
+<script>
+var QS=[
+{id:26,t:"我以直接的自信追求浪漫兴趣。"},
+{id:7,t:"我隐藏自己的疲惫以满足社交期望。"},
+{id:33,t:"在承认无意的伤害之前，我会先为自己过去的行为辩护。"},
+{id:13,t:"我倾向于介入他人的问题。"},
+{id:19,t:"我等待自然发生的时刻，而不是强求结果。"},
+{id:12,t:"我利用幽默和调侃来转移个人的脆弱感。"},
+{id:10,t:"我很容易表现出社交需求何时耗尽了我的精力。"},
+{id:32,t:"我倾向于假设他人与我有相同的社交期望。"},
+{id:28,t:"我将浪漫中的犹豫视为一种劣势。"},
+{id:9,t:"我难以拒绝浪漫的关注而不感到内疚。"},
+{id:6,t:"我充当调解人以维持社交和平。"},
+{id:29,t:"我采取防御行动以防止自己先被拒绝。"},
+{id:30,t:"我被动地等待别人采取浪漫行动。"},
+{id:21,t:"我能迅速察觉到周围未言明的紧张气氛和浪漫动态。"},
+{id:23,t:"我用冷幽默来处理社交摩擦。"},
+{id:2,t:"我倾向于过度分析细微的社交暗示和误解。"},
+{id:31,t:"我直率地解决问题，而不担心细微的尴尬。"},
+{id:24,t:"我喜欢与朋友共度低压力的时光，而不要求深入交谈。"},
+{id:1,t:"当社交场合让我感到难以承受时，我会退缩到沉默中。"},
+{id:22,t:"我提供实用的建议，而不粉饰真相。"},
+{id:4,t:"我用防御性的表情来隐藏我关怀的本性。"},
+{id:11,t:"我持续地向那些看起来疏远的人伸出援手。"},
+{id:14,t:"我忙于帮助他人以避免面对被拒绝。"},
+{id:16,t:"我提供稳定的支持，而不强加建议。"},
+{id:27,t:"我利用魅力来保持对社交场合的控制。"},
+{id:17,t:"我放下个人的浪漫情感以保护群体和谐。"},
+{id:15,t:"我让安静的人独处，而不是试图把他们拉出来。"},
+{id:3,t:"我保持坚定的界限来保护我的个人空间。"},
+{id:18,t:"我仅通过保持放松来平息紧张的局面。"},
+{id:35,t:"在说话之前，我会仔细检查我的话可能会产生什么影响。"},
+{id:5,t:"我很容易让新相识进入我的个人圈子。"},
+{id:8,t:"我极力保护我的亲密朋友免受外界的敌意。"},
+{id:25,t:"我忽视了社交圈中微妙的情感变化。"},
+{id:34,t:"在收到明确的反馈后，我会承担责任。"},
+{id:20,t:"在不确定的关系中，我追求立即得到答案。"}
+];
+var LABELS=["很不同意","不同意","一般","同意","很同意"];
+var GROUPROLE={1:"xiaoxue",2:"meiji",3:"cou",4:"yangtai",5:"yuezi",6:"momoka",7:"yi"};
+var ROLES={
+ yuezi:{n:"霜岛月子",d:"霜岛月子是一位善于观察的美术部学生，她能提供稳定、简单的陪伴，并对未言明的社交动态有着敏锐的洞察力。她能迅速察觉到同伴之间流动的浪漫摩擦、安静的焦虑和沟通误解。她没有卷入高风险的戏剧性事件，而是通过冷幽默、实用的建议和轻松的交谈来处理摩擦。她的主要矛盾在于，她能毫不费力地分析他人纠结的情感，却是一个局外观察者，在表达自己更深层的脆弱方面远不够熟练。即便如此，她那种低压力的存在感和坦率的诚实，使她成为那些不善沟通的朋友们坚实的盟友。"},
+ momoka:{n:"栗木桃香",d:"栗木桃香是一位迷人且积极的低年级学生，她以直接的自信对待浪漫，而不是在场边等待。她依靠甜美、敏锐的社交意识和果断的行动力来引导互动向有利于自己的方向发展。她将犹豫视为明显的劣势，公开追求自己喜欢的人，并拒绝让不确定性阻碍自己的节奏。然而，在她光鲜的外表和竞争心之下，隐藏着一种源于过去伤害的防御本能。她对连接的大胆追求，既是为了情感上的自我保护，也是出于真诚的吸引，其驱动力源于一种深层的需求，即保持控制，防止别人先拒绝或羞辱她。"},
+ meiji:{n:"安昙美姬",d:"安昙美姬是一位受欢迎、迷人的高中生，她努力维持和平并满足每个人的期望。作为小雪极具保护欲的青梅竹马，她提供了一个安全的避风港，同时敏锐地留意着任何可能造成伤害的人。美姬自然地扮演了社交调解人的角色，用轻松的微笑和明亮的活力化解尴尬时刻。然而，她光鲜的公众形象掩盖了情感上的疲惫。她总是担心让别人失望，每当无法回应他人的浪漫情感时，她都会陷入强烈的内疚感。只有在最亲密的同伴面前，她才能放下开朗的表演，展现出真实、坦率的自我。"},
+ yangtai:{n:"日野阳太",d:"日野阳太是一位可靠的篮球运动员，他冷静而温柔的存在使他成为朋友圈中最让人感到安全的人。他默默地照顾他人，提供实际的支持和稳定的安慰，而不强加建议或要求他人认可他的忠诚。他不喜欢人际摩擦，更喜欢让紧张的时刻自然消散。然而，他维持群体和谐的深切愿望很容易变成自我抹杀。他经常埋藏自己的浪漫情感，推迟个人的幸福，将他人的舒适置于表达自我之前。即使面对困难的情感真相，他依然保持耐心、体贴和脚踏实地。"},
+ xiaoxue:{n:"冰川小雪",d:"冰川小雪是一位防御心强的高中生，她用安静、防御性的外表掩盖了自己敏感的本性。在经历过过去的社交误解后，她保持着坚定的界限，比起不可预测的新相识，她更喜欢独处。她仔细观察周围环境，过度分析细微的互动，并在情况感到难以承受时退缩到沉默中。她严肃的表情常让别人误以为她冷漠或充满敌意，然而在她的围墙之下，隐藏着深层的同理心和被理解的安静愿望。虽然让人们进入她的内心圈子感觉充满风险，但她发现保护自己并不意味着必须生活在完全的孤立中。"},
+ cou:{n:"雨宫凑",d:"雨宫凑是一位外向、积极的学生，他将情感距离视为等待解决的谜题。他乐于接近防御心强的同伴，利用机智的幽默和持续的调侃将他们从壳中拉出来。他的本能是介入他人的问题，这源于一种连接的渴望和被需要的需求。然而，他自信的社交能力掩盖了他自己对被拒绝的恐惧以及对脆弱感的不适。虽然他不知疲倦地试图理解他人，但他却难以承认自己的浪漫情感和私人疑虑。他经常忙于帮助朋友，以避免面对自己真正想要的东西。"},
+ yi:{n:"五十岚翼",d:"五十岚翼是一位直言不讳的足球运动员，他的社交自信和直率的诚实使他能毫不犹豫地解决问题。他直接地处理人际关系，期望他人以同样未经修饰的清晰度进行沟通，并假设如果有什么不对劲，人们会说出来。因为他依赖于自己对“正常”的标准，他很容易误读个人界限，或者在不检查自己的行为如何真正影响他人之前就向前推进。虽然他在受到批评时可能会先进行自我辩护，但他并无恶意，一旦意识到良好的意图并不能消除真实的心理不适，他就有能力面对痛苦的责任。"}
+};
+var ORDER=["xiaoxue","meiji","cou","yangtai","yuezi","momoka","yi"];
+var REVERSE={5:1,10:1,15:1,20:1,25:1,30:1,35:1};
+var idx=0, ans=new Array(QS.length).fill(null);
+function show(id){["intro","quiz","result"].forEach(function(x){document.getElementById(x).style.display=(x===id?"block":"none")});window.scrollTo(0,0)}
+function start(){idx=0;ans.fill(null);show("quiz");render()}
+function render(){
+  var q=QS[idx];
+  document.getElementById("qnum").textContent="问题 "+(idx+1)+" / "+QS.length;
+  document.getElementById("progress").style.width=((idx+1)/QS.length*100)+"%";
+  document.getElementById("qtext").textContent=q.t;
+  var o=document.getElementById("opts");o.innerHTML="";
+  LABELS.forEach(function(lb,i){
+    var b=document.createElement("div");b.className="opt"+(ans[idx]===i?" sel":"");b.textContent=lb;
+    b.onclick=function(){ans[idx]=i;render()};o.appendChild(b);
+  });
+  document.getElementById("prev").disabled=idx===0;
+  document.getElementById("next").textContent=(idx===QS.length-1?"查看结果":"下一题");
+}
+function prev(){if(idx>0){idx--;render()}}
+function next(){
+  if(ans[idx]===null){return}
+  if(idx<QS.length-1){idx++;render()}
+  else{finish()}
+}
+function finish(){
+  var sc={};ORDER.forEach(function(k){sc[k]=0});
+  QS.forEach(function(q,i){
+    if(ans[i]===null)return;
+    var r=GROUPROLE[Math.ceil(q.id/5)];
+    var v=REVERSE[q.id]?(4-ans[i]):ans[i];
+    sc[r]+=v;
+  });
+  var top=ORDER.slice().sort(function(a,b){return sc[b]-sc[a]})[0];
+  document.getElementById("resName").textContent=ROLES[top].n;
+  document.getElementById("resDesc").textContent=ROLES[top].d;
+  var h="";
+  ORDER.slice().sort(function(a,b){return sc[b]-sc[a]}).forEach(function(k){
+    var pc=Math.round(sc[k]/20*100);
+    h+='<div class="row'+(k===top?" top":"")+'"><span class="nm">'+ROLES[k].n+'</span>'+
+       '<span class="track"><i style="width:'+pc+'%"></i></span><span class="pc">'+pc+'%</span></div>';
+  });
+  document.getElementById("bars").innerHTML=h;
+  show("result");
+}
+</script>
+</body>
+</html>
